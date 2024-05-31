@@ -8,26 +8,27 @@ export function Header() {
 
     return (
         <>
-            <Flex w='100%' h='70px' p='6px' align='center' justify='space-between' bgColor='#13444d' color='white'>
+            <Flex w='100%' h='70px' p='6px' align='center' justify='space-between' bgColor='#13444d' color='black'>
                 <HStack as='nav' spacing='10px'>
-                <Menu bg="black">  
-                    <MenuButton as={IconButton} aria-label="Opciones" icon={<AiOutlineMenu />} _hover={{ color: 'blue.500' }} variant="outline" bg=".100"></MenuButton>
-                    <MenuList bg="black" >
-                    <MenuItem as={Link} to="/nuevoProveedor" _hover={{ color: 'blue.500' }}>
-                        Nuevo Proveedor
-                    </MenuItem>
-                    <MenuItem as={Link} to="/editarProveedor" _hover={{ color: 'blue.500' }}>
-                        Editar Proveedor
-                    </MenuItem>
-                    <MenuItem as={Link} to="/eliminarProveedor" _hover={{ color: 'blue.500' }}>
-                        Eliminar Proveedor
-                    </MenuItem>
-                    </MenuList>
-                </Menu>
+                    <Menu>  
+                        <MenuButton as={IconButton} aria-label="Opciones" icon={<AiOutlineMenu />} variant="outline" bg='#ffffff '></MenuButton>
+                        <MenuList>
+                            <MenuItem as={Link} to="/nuevoRubro">
+                                Nuevo Proveedor
+                            </MenuItem>
+                            <MenuItem as={Link} to="/editarProveedor">
+                                Editar Proveedor
+                            </MenuItem>
+                            <MenuItem as={Link} to="/eliminarProveedor">
+                                Eliminar Proveedor
+                            </MenuItem>
+                        </MenuList>
+                    </Menu>
+
                 </HStack>
 
                 <HStack as='nav' spacing='10px'>
-                    <Box mr='20px' cursor='pointer' _hover={{ color: 'gray.300' }} onClick={() => cerrarSesion()}>Cerrar sesión</Box>
+                    <Box mr='20px' cursor='pointer' color ='white' _hover={{ color: 'gray.300' }} onClick={() => cerrarSesion()}>Cerrar sesión</Box>
                 </HStack>
             </Flex>
         </>

@@ -4,7 +4,7 @@ import * as React from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Center, Box, Heading, FormControl, FormLabel, Input, Button } from '@chakra-ui/react';
 
-export function DespachoNew() {
+export function RegistroRubro() {
     const navigate = useNavigate();
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
@@ -32,7 +32,7 @@ export function DespachoNew() {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(rubro),
-                credentials: 'include', // Envia cookies con la solicitud
+               // credentials: 'include', // Envia cookies con la solicitud
             });
 
             const data = await response.json();
@@ -64,7 +64,7 @@ export function DespachoNew() {
                         <form onSubmit={handleSubmit}>
                             <FormControl mt='3px'>
                                 <FormLabel>Nombre</FormLabel>                                      
-                                <Input id='nombre' type='text' required onChange={(event) => setDespacho({...despacho, nombre: event.target.value})} />
+                                <Input id='nombre' type='text' required onChange={(event) => setRubro({...rubro, nombre: event.target.value})} />
                             </FormControl>
                             <FormControl mt='3px'>
                                 <Button type="submit">Crear Rubro</Button>
