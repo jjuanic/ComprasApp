@@ -8,7 +8,7 @@ async function selectProveedores () {
     return result;
 }
 
-async function insertProveedor(con, proveedorDTO) {
+async function insertProveedor(proveedorDTO) {
     const [result] = await con.execute(
         `INSERT INTO Proveedor (nombre, numeroTelefono, codPostal, descripcion, email, CUIT, sitioWeb) 
          VALUES (?, ?, ?, ?, ?, ?, ?)`,

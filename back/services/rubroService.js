@@ -3,12 +3,16 @@ import rubroDTO from '../models/RubroDTO.js'
 
 const con = connection.promise();
 
-async function insertRubro(con, rubroDTO) {
-    const [result] = await con.execute(
+async function insertRubro(rubroNombre) {
+    if (rubroNombre === undefined) {
+        throw new TypeError('El parámetro rubroNombre no puede ser undefined');
+      }
+    
+      const [result] = await con.execute(
         'INSERT INTO Rubro (nombre) VALUES (?)',
-        [rubroDTO.getNombre()]
-    );
-    return result;
+        [rubroNombre]
+      );
+      return result;
 }
 
 async function selectRubro () {

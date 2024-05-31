@@ -8,7 +8,7 @@ nombre varchar(30)
 );
 
 create table Proveedor (
-idProvedor int not null AUTO_INCREMENT primary key,
+idProveedor int not null AUTO_INCREMENT primary key,
 nombre varchar(30),
 numeroTelefono varchar(30),
 codPostal varchar(30),
@@ -22,6 +22,14 @@ create table tipoIva (
 idTipoIva int not null AUTO_INCREMENT primary key,
 nombre varchar(30),
 valor float
+);
+
+create table RubroProveedor(
+idRubro int,
+idProveedor int,
+primary key (idRubro, idProveedor),
+foreign key (idRubro) references Rubro (idRubro),
+foreign key (idProveedor) references Proveedor (idProveedor)
 );
 
 INSERT INTO tipoIva (nombre,valor)
