@@ -1,11 +1,11 @@
 
 import ProveedorDTO from "../models/ProveedorDTO.js";
-import { insertRubroProveedor, selectRubroProveedor } from "../services/rubroProveedorService.js";
+import { insertRubroProveedor, selectProveedoresYRubros } from "../services/rubroProveedorService.js";
 import { insertRubro, selectRubro } from "../services/rubroService.js";
 import { insertProveedor } from "../services/proveedorService.js";
 
-const getRubroProveedor = async (req, res) => {
-    const rubroProveedor = await selectRubroProveedor()
+const getRubroYProveedor = async (req, res) => {
+    const rubroProveedor = await selectProveedoresYRubros()
     res.json(rubroProveedor)
 };
 
@@ -58,5 +58,5 @@ const postRubroProveedor = async (req, res) => {
   
 export {
     postRubroProveedor,
-    getRubroProveedor
+    getRubroYProveedor
 };

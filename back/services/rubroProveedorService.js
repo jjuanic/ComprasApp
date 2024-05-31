@@ -23,7 +23,53 @@ async function selectRubroProveedor() {
     }
 }
 
+
+const selectProveedoresYRubros = async () => {
+    try {
+        // Ejecutar la consulta SQL
+        const result = await client.query(`
+            SELECT p.*, r.idrubro, r.nombre
+            FROM proveedor p
+            JOIN rubroproveedor rp ON rp.idproveedor = p.idproveedor
+            JOIN rubro r ON r.idrubro = rp.idrubro
+            ORDER BY p.idproveedor ASC
+        `);
+
+        // Manipular los resultados para estructurarlos como un objeto JSON
+        const proveedoresConRubros = {};
+        result.rows.forEach(row => {
+            const { idproveedor, nombre, numerotelefono, codpostal, descripcion, email, cuit, sitioweb, idrubro, nombre: nombreRubro } = row;
+            if (!proveedoresConRubros[idproveedor]) {
+                proveedoresConRubros[idproveedor] = {
+                    idProveedor: idproveedor,
+                    nombreProveedor: nombre,
+                    numeroTelefono: numerotelefono,
+                    codPostal: codpostal,
+                    descripcion: descripcion,
+                    email: email,
+                    CUIT: cuit,
+                    sitioWeb: sitioweb,
+                    rubros: []
+                };
+            }
+            proveedoresConRubros[idproveedor].rubros.push({
+                idRubro: idrubro,
+                nombreRubro: nombreRubro
+            });
+        });
+
+        // Convertir el objeto JSON en un arreglo de proveedores
+        const proveedoresArray = Object.values(proveedoresConRubros);
+
+        return proveedoresArray;
+    } catch (error) {
+        console.error('Error al obtener proveedores y rubros:', error);
+        throw error;
+    }
+}
+
 export {
     insertRubroProveedor,
-    selectRubroProveedor
+    selectRubroProveedor,
+    selectProveedoresYRubros
 };
