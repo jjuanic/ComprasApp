@@ -14,8 +14,8 @@ const postRubro = async (req, res) => {
     }
   
     try {
-      await insertRubro(nombre);
-      res.status(201).json({ message: "Rubro insertado correctamente" });
+      const rubro = await insertRubro(nombre);
+      res.status(201).json({ message: "Rubro insertado correctamente" , id:rubro.idrubro});
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: "Error al insertar el rubro" });
