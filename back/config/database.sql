@@ -3,12 +3,12 @@ create database comprasApp;
 use comprasApp;
 
 create table Rubro (
-idRubro int not null AUTO_INCREMENT primary key,
+idRubro SERIAL not null primary key,
 nombre varchar(30)
 );
 
 create table Proveedor (
-idProveedor int not null AUTO_INCREMENT primary key,
+idProveedor SERIAL not null primary key,
 nombre varchar(30),
 numeroTelefono varchar(30),
 codPostal varchar(30),
@@ -19,7 +19,7 @@ sitioWeb varchar(30)
 );
 
 create table tipoIva (
-idTipoIva int not null AUTO_INCREMENT primary key,
+idTipoIva SERIAL not null primary key,
 nombre varchar(30),
 valor float
 );

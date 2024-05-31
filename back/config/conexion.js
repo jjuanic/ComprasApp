@@ -1,25 +1,27 @@
-import mysql from 'mysql2';
+import pg from 'pg';
+const { Client } = pg;
 import dotenv from 'dotenv';
 dotenv.config();
 
-const PORTSQL = process.env.PORTSQL;
-const USERSQL= process.env.USERSQL;
-const PASSWORDSQL= process.env.PASSWORDSQL; 
-const HOSTSQL = process.env.HOSTSQL;
-const DATASQL = process.env.DATASQL;
+const URLSQL = process.env.URLSQL
 
-//Conexión a la base de datos
-const connection = mysql.createConnection({
-    port: PORTSQL,
-    host: HOSTSQL,
-    user:USERSQL,
-    password: PASSWORDSQL,
-    database: DATASQL,
+// Conexión a la base de datos
+const client = new Client({
+    connectionString: URLSQL,
+    ssl: {
+        rejectUnauthorized: false,
+        // or puedes usar sslmode: 'require' si lo prefieres
+        // sslmode: 'require'
+    }
 });
 
-connection.connect((err) => {
-    if (err) throw err;
-    console.log(`Conexión exitosa a la base de datos: ${DATASQL}`);
+client.connect((err) => {
+    if (err) {
+        console.error('Error al conectar a la base de datos', err);
+        throw err;
+    } else {
+        console.log(`Conexión exitosa a la base de datos`);
+    }
 });
 
-export default connection;
+export default client;

@@ -1,18 +1,25 @@
-import connection from '../config/conexion.js'
-import ProveedorDto from '../models/ProveedorDTO.js'
+import client from '../config/conexion.js'; // Importa la conexión PostgreSQL
+import ProveedorDto from '../models/ProveedorDTO.js';
 
-const con = connection.promise();
+const con = client;
 
-async function selectProveedores () {
-    const [result] = await con.execute('SELECT * FROM Proveedor')
-    return result;
+async function selectProveedores() {
+    try {
+        const result = await con.query('SELECT * FROM Proveedor');
+        return result.rows;
+    } catch (error) {
+        console.error('Error al seleccionar proveedores:', error);
+        throw error;
+    }
 }
 
 async function insertProveedor(proveedorDTO) {
-    const [result] = await con.execute(
-        `INSERT INTO Proveedor (nombre, numeroTelefono, codPostal, descripcion, email, CUIT, sitioWeb) 
-         VALUES (?, ?, ?, ?, ?, ?, ?)`,
-        [
+    try {
+        const query = `
+            INSERT INTO Proveedor (nombre, numeroTelefono, codPostal, descripcion, email, CUIT, sitioWeb) 
+            VALUES ($1, $2, $3, $4, $5, $6, $7)
+            RETURNING idProveedor`; // Devuelve el ID del proveedor insertado
+        const values = [
             proveedorDTO.getNombre(),
             proveedorDTO.getNumeroTelefono(),
             proveedorDTO.getCodPostal(),
@@ -20,14 +27,16 @@ async function insertProveedor(proveedorDTO) {
             proveedorDTO.getEmail(),
             proveedorDTO.getCUIT(),
             proveedorDTO.getSitioWeb()
-        ]
-    );
-    const [insertedIdResult] = await con.query('SELECT LAST_INSERT_ID() as id');
-    const lastInsertedId = insertedIdResult[0].id;
-    return lastInsertedId
+        ];
+        const result = await con.query(query, values);
+        return result.rows[0].idproveedor; // Devuelve el ID del proveedor insertado
+    } catch (error) {
+        console.error('Error al insertar proveedor:', error);
+        throw error;
+    }
 }
 
 export {
     selectProveedores,
     insertProveedor
-}
+};

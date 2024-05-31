@@ -1,26 +1,34 @@
-import connection from '../config/conexion.js'
-import rubroDTO from '../models/RubroDTO.js'
-
-const con = connection.promise();
+import client from '../config/conexion.js'; // Importa la conexión PostgreSQL
+import RubroDTO from '../models/RubroDTO.js';
 
 async function insertRubro(rubroNombre) {
-    if (rubroNombre === undefined) {
-        throw new TypeError('El parámetro rubroNombre no puede ser undefined');
-      }
-    
-      const [result] = await con.execute(
-        'INSERT INTO Rubro (nombre) VALUES (?)',
-        [rubroNombre]
-      );
-      return result;
+    try {
+        if (rubroNombre === undefined) {
+            throw new TypeError('El parámetro rubroNombre no puede ser undefined');
+        }
+
+        const query = 'INSERT INTO Rubro (nombre) VALUES ($1) RETURNING *';
+        const values = [rubroNombre];
+        const result = await client.query(query, values);
+        return result.rows[0];
+    } catch (error) {
+        console.error('Error al insertar rubro:', error);
+        throw error;
+    }
 }
 
-async function selectRubro () {
-    const [result] = await con.execute('SELECT * FROM Rubro')
-    return result;
+async function selectRubro() {
+    try {
+        const query = 'SELECT * FROM Rubro';
+        const result = await client.query(query);
+        return result.rows;
+    } catch (error) {
+        console.error('Error al seleccionar rubros:', error);
+        throw error;
+    }
 }
 
-export{ 
+export {
     insertRubro,
     selectRubro
-}
+};

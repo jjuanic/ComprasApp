@@ -46,11 +46,9 @@ const postRubroProveedor = async (req, res) => {
     console.log(idRubros);
   
     try {
-      const respuesta = await insertProveedor(proveedorDTO);
-      const idProveedor = respuesta
-      idRubros.forEach(id => {
-        insertRubroProveedor(id,idProveedor)
-      });
+      const idProveedor = await insertProveedor(proveedorDTO);
+      console.log('Id del Proveedor: ', idProveedor);
+      await Promise.all(idRubros.map(id => insertRubroProveedor(id, idProveedor)));
       res.status(201).json({ message: "Proveedor con rubros insertados correctamente" });
     } catch (error) {
       console.error(error);
