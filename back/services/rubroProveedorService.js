@@ -28,11 +28,10 @@ const selectProveedoresYRubros = async () => {
     try {
         // Ejecutar la consulta SQL
         const result = await client.query(`
-            SELECT p.*, r.idrubro, r.nombre
-            FROM proveedor p
-            JOIN rubroproveedor rp ON rp.idproveedor = p.idproveedor
-            JOIN rubro r ON r.idrubro = rp.idrubro
-            ORDER BY p.idproveedor ASC
+            select p.*,r.idrubro,r.nombre from proveedor p
+            left join rubroProveedor rp on rp.idproveedor = p.idproveedor 
+            left join rubro r on r.idrubro = rp.idrubro 
+            order by p.idproveedor ASC
         `);
 
         // Manipular los resultados para estructurarlos como un objeto JSON
