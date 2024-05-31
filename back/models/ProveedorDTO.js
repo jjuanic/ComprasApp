@@ -1,6 +1,6 @@
 class ProveedorDTO {
-    constructor(idProveedor, nombre, numeroTelefono, codPostal, descripcion, email, CUIT, sitioWeb) {
-        this.idProveedor = idProveedor;
+    constructor(nombre, numeroTelefono, codPostal, descripcion, email, CUIT, sitioWeb) {
+        // this.idProveedor = idProveedor;
         this.nombre = nombre;
         this.numeroTelefono = numeroTelefono;
         this.codPostal = codPostal;
@@ -10,14 +10,14 @@ class ProveedorDTO {
         this.sitioWeb = sitioWeb;
     }
 
-    // Getters y Setters
-    getIdProveedor() {
-        return this.idProveedor;
-    }
+    // // Getters y Setters
+    // getIdProveedor() {
+    //     return this.idProveedor;
+    // }
 
-    setIdProveedor(idProveedor) {
-        this.idProveedor = idProveedor;
-    }
+    // setIdProveedor(idProveedor) {
+    //     this.idProveedor = idProveedor;
+    // }
 
     getNombre() {
         return this.nombre;

@@ -22,7 +22,9 @@ async function insertProveedor(proveedorDTO) {
             proveedorDTO.getSitioWeb()
         ]
     );
-    return result;
+    const [insertedIdResult] = await con.query('SELECT LAST_INSERT_ID() as id');
+    const lastInsertedId = insertedIdResult[0].id;
+    return lastInsertedId
 }
 
 export {
