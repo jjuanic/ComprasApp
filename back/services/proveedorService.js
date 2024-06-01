@@ -31,6 +31,26 @@ async function deleteProveedor(idProveedor) {
     }
 }
 
+async function updateProveedor(idProveedor, proveedorDTO) {
+    const query = `
+        UPDATE Proveedor
+        SET nombre = $1, numeroTelefono = $2, codPostal = $3, descripcion = $4, email = $5, CUIT = $6, sitioWeb = $7
+        WHERE idProveedor = $8
+    `;
+    const values = [
+        proveedorDTO.nombre,
+        proveedorDTO.numeroTelefono,
+        proveedorDTO.codPostal,
+        proveedorDTO.descripcion,
+        proveedorDTO.email,
+        proveedorDTO.CUIT,
+        proveedorDTO.sitioWeb,
+        idProveedor
+    ];
+
+    await client.query(query, values);
+}
+
 async function insertProveedor(proveedorDTO) {
     try {
         const query = `
@@ -57,5 +77,6 @@ async function insertProveedor(proveedorDTO) {
 export {
     selectProveedores,
     insertProveedor,
-    deleteProveedor
+    deleteProveedor,
+    updateProveedor
 };

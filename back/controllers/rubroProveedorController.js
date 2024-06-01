@@ -2,7 +2,7 @@
 import ProveedorDTO from "../models/ProveedorDTO.js";
 import { deleteAllRubroProveedor, insertRubroProveedor, selectProveedoresYRubros } from "../services/rubroProveedorService.js";
 import { insertRubro, selectRubro } from "../services/rubroService.js";
-import { deleteProveedor, insertProveedor } from "../services/proveedorService.js";
+import { deleteProveedor, insertProveedor, updateProveedor } from "../services/proveedorService.js";
 
 const getRubroYProveedor = async (req, res) => {
     const rubroProveedor = await selectProveedoresYRubros()
@@ -61,9 +61,53 @@ const postRubroProveedor = async (req, res) => {
       res.status(500).json({ error: "Error al insertar el rubro" });
     }
   };
+
+  const updateRubroProveedor = async (req, res) => {
+    const {
+        idProveedor,
+        nombre,
+        numeroTelefono,
+        codPostal,
+        descripcion,
+        email,
+        CUIT,
+        sitioWeb
+    } = req.body.proveedor;
+
+    const proveedorDTO = new ProveedorDTO(
+        nombre,
+        numeroTelefono,
+        codPostal,
+        descripcion,
+        email,
+        CUIT,
+        sitioWeb
+    );
+    
+    const idRubros = req.body.rubros;
+
+    console.log(idRubros);
+  
+    try {
+        await updateProveedor(idProveedor, proveedorDTO);
+        console.log('Proveedor actualizado con id: ', idProveedor);
+
+        // Primero eliminamos los rubros actuales del proveedor
+        await deleteAllRubroProveedor(idProveedor);
+
+        // Luego insertamos los nuevos rubros
+        await Promise.all(idRubros.map(id => insertRubroProveedor(id, idProveedor)));
+
+        res.status(200).json({ message: "Proveedor con rubros actualizados correctamente", idProveedor: idProveedor });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Error al actualizar el rubro" });
+    }
+};
   
 export {
     postRubroProveedor,
     getRubroYProveedor,
-    deleteRubroProveedor
+    deleteRubroProveedor,
+    updateRubroProveedor
 };
