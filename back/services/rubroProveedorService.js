@@ -27,16 +27,17 @@ async function selectRubroProveedor() {
 const selectProveedoresYRubros = async () => {
     try {
         const result = await client.query(`
-            select p.*,r.idrubro,r.nombre as nombreRubro from proveedor p
-            left join rubroProveedor rp on rp.idproveedor = p.idproveedor 
-            left join rubro r on r.idrubro = rp.idrubro 
-            order by p.idproveedor ASC
+            SELECT p.*, r.idrubro, r.nombre AS nombrerubro 
+            FROM proveedor p
+            LEFT JOIN rubroProveedor rp ON rp.idproveedor = p.idproveedor 
+            LEFT JOIN rubro r ON r.idrubro = rp.idrubro 
+            ORDER BY r.nombre ASC
         `);
 
-        // Estructuro los resultados para json
+        // Estructurar los resultados para JSON
         const proveedoresConRubros = {};
         result.rows.forEach(row => {
-            const { idproveedor, nombre, numerotelefono, codpostal, descripcion, email, cuit, sitioweb, idrubro, nombrerubro: nombreRubro } = row;
+            const { idproveedor, nombre, numerotelefono, codpostal, descripcion, email, cuit, sitioweb, idrubro, nombrerubro } = row;
             if (!proveedoresConRubros[idproveedor]) {
                 proveedoresConRubros[idproveedor] = {
                     idProveedor: idproveedor,
@@ -50,21 +51,31 @@ const selectProveedoresYRubros = async () => {
                     rubros: []
                 };
             }
-            proveedoresConRubros[idproveedor].rubros.push({
-                idRubro: idrubro,
-                nombreRubro: nombreRubro
-            });
+            if (idrubro && nombrerubro) {
+                proveedoresConRubros[idproveedor].rubros.push({
+                    idRubro: idrubro,
+                    nombreRubro: nombrerubro
+                });
+            }
         });
 
-        // a json
-        const proveedoresArray = Object.values(proveedoresConRubros);
+        // Convertir a array y ordenar por nombreRubro
+        let proveedoresArray = Object.values(proveedoresConRubros);
+
+        // Ordenar los proveedores por nombre del primer rubro
+        proveedoresArray.sort((a, b) => {
+            if (a.rubros.length === 0 && b.rubros.length === 0) return 0;
+            if (a.rubros.length === 0) return 1;
+            if (b.rubros.length === 0) return -1;
+            return a.rubros[0].nombreRubro.localeCompare(b.rubros[0].nombreRubro);
+        });
 
         return proveedoresArray;
-    } catch (error) {
-        console.error('Error al obtener proveedores y rubros:', error);
-        throw error;
+    } catch (err) {
+        console.error(err);
+        throw err;
     }
-}
+};
 
 export {
     insertRubroProveedor,
