@@ -25,7 +25,6 @@ export function RegistroRubro() {
         }
 
         try {
-            console.log(rubro); //Vemos si el rubro se pasa bien
             const response = await fetch('http://localhost:8080/rubro', {
                 method: 'POST',
                 headers: {
@@ -40,7 +39,6 @@ export function RegistroRubro() {
             if (response.ok) {
                 setSuccess('Rubro con éxito');
                 setError('');
-                navigate('/Principal');
             } else {
                 setError(data.errores || 'Error al crear el rubro');
             }

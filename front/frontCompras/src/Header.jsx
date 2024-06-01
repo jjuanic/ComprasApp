@@ -13,11 +13,11 @@ export function Header() {
                     <Menu>  
                         <MenuButton as={IconButton} aria-label="Opciones" icon={<AiOutlineMenu />} variant="outline" bg='#ffffff '></MenuButton>
                         <MenuList>
-                            <MenuItem as={Link} to="/nuevoRubro">
+                            <MenuItem as={Link} to="/registroProveedor">
                                 Nuevo Proveedor
                             </MenuItem>
-                            <MenuItem as={Link} to="/editarProveedor">
-                                Editar Proveedor
+                            <MenuItem as={Link} to="/registroRubro">
+                                Nuevo Rubro
                             </MenuItem>
                             <MenuItem as={Link} to="/eliminarProveedor">
                                 Eliminar Proveedor

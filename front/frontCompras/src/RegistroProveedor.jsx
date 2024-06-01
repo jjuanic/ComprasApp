@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Header } from './Header';
-import * as React from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Center, Box, Heading, FormControl, FormLabel, Input, Button, Select } from '@chakra-ui/react';
 
 export function RegistroProveedor() {
@@ -9,6 +8,7 @@ export function RegistroProveedor() {
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
     const [rubros, setRubros] = useState([]);
+    const [rubrosSeleccionados, setRubrosSeleccionados] = useState([]);
     const [proveedor, setProveedor] = useState({
         nombre: '',
         numeroTelefono: '',
@@ -16,8 +16,7 @@ export function RegistroProveedor() {
         descripcion: '',
         email: '',
         CUIT: '',
-        sitioWeb: '',
-        rubrosSeleccionados: []
+        sitioWeb: ''
     });
 
     useEffect(() => {
@@ -30,8 +29,10 @@ export function RegistroProveedor() {
                     },
                 });
                 const data = await response.json();
+                console.log('Respuesta de la API:', data); // Añadir este log
                 if (response.ok) {
                     setRubros(data);
+                    console.log('Rubros establecidos:', data); // Añadir este log
                 } else {
                     setError('Error al cargar los rubros');
                 }
@@ -44,17 +45,20 @@ export function RegistroProveedor() {
     }, []);
 
     const handleSelectRubro = (event) => {
-        const selectedRubro = rubros.find(rubro => rubro.id === event.target.value);
-        setProveedor({ ...proveedor, rubrosSeleccionados: [...proveedor.rubrosSeleccionados, selectedRubro] });
-        setRubros(rubros.filter(rubro => rubro.id !== event.target.value));
+        const selectedRubroId = parseInt(event.target.value);
+        const selectedRubro = rubros.find(rubro => rubro.idRubro === selectedRubroId);
+        if (selectedRubro) {
+            setProveedor({ ...proveedor, rubrosSeleccionados: [...proveedor.rubrosSeleccionados, selectedRubro] });
+            setRubros(rubros.filter(rubro => rubro.idRubro !== selectedRubroId));
+        }
     };
-
+    
     const handleRemoveRubro = (rubroId) => {
-        const rubroToRemove = proveedor.rubrosSeleccionados.find(rubro => rubro.id === rubroId);
-        setProveedor({ ...proveedor, rubrosSeleccionados: proveedor.rubrosSeleccionados.filter(rubro => rubro.id !== rubroId) });
-        setRubros([...rubros, rubroToRemove]);
+        const removedRubro = proveedor.rubrosSeleccionados.find(rubro => rubro.idRubro === rubroId);
+        setProveedor({ ...proveedor, rubrosSeleccionados: proveedor.rubrosSeleccionados.filter(rubro => rubro.idRubro !== rubroId) });
+        setRubros([...rubros, removedRubro]);
     };
-
+    
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -73,14 +77,13 @@ export function RegistroProveedor() {
         }
 
         try {
-            console.log(proveedor); //Vemos si el proveedor se pasa bien
-            const response = await fetch('http://localhost:8080/proveedor', {
+            console.log(proveedor); // Verifica si el proveedor se pasa correctamente
+            const response = await fetch('http://localhost:8080/proveedor/rubro', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(proveedor),
-               // credentials: 'include', // Envia cookies con la solicitud
             });
 
             const data = await response.json();
@@ -130,23 +133,28 @@ export function RegistroProveedor() {
                                 <FormLabel>CUIT</FormLabel>                                      
                                 <Input id='cuit' type='text' required onChange={(event) => setProveedor({...proveedor, CUIT: event.target.value})} />
                             </FormControl>
-                            <FormControl mt='10px'>
+                            <FormControl mt='3px'>
+                                <FormLabel>Sitio Web</FormLabel>                                      
+                                <Input id='cuit' type='text' placeholder='URL' required onChange={(event) => setProveedor({...proveedor, sitioWeb: event.target.value})} />
+                            </FormControl>
+                            <FormControl mt='10px'> 
                                 <Select name="rubros" placeholder="Rubros" onChange={handleSelectRubro}>
                                     {rubros.map(rubro => (
-                                        <option key={rubro.id} value={rubro.id}>{rubro.name}</option>
+                                        <option key={rubro.idRubro} value={rubro.idRubro}>{rubro.nombre}</option>
                                     ))}
                                 </Select>
                             </FormControl>
 
                             <Box mt='10px'>
                                 <FormLabel>Rubros Seleccionados</FormLabel>
-                                {proveedor.rubrosSeleccionados.map((rubro, index) => (
-                                    <Box key={index} mt='3px' display="flex" justifyContent="space-between" alignItems="center">
-                                        {rubro.name}
-                                        <Button ml='10px' onClick={() => handleRemoveRubro(rubro.id)}>Eliminar</Button>
+                                {rubrosSeleccionados.map((rubro) => (
+                                    <Box key={rubro.idRubro} mt='3px' display="flex" justifyContent="space-between" alignItems="center">
+                                        {rubro.nombre}
+                                        <Button ml='10px' onClick={() => handleRemoveRubro(rubro.idRubro)}>Eliminar</Button>
                                     </Box>
                                 ))}
                             </Box>
+
                             <FormControl mt='10px'>
                                 <Button type="submit">Crear Proveedor</Button>
                             </FormControl>
