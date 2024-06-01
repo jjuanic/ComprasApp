@@ -13,6 +13,24 @@ async function selectProveedores() {
     }
 }
 
+async function deleteProveedor(idProveedor) {
+    try {
+        const query = 'DELETE FROM Proveedor WHERE idProveedor = $1';
+        const values = [idProveedor];
+        const result = await client.query(query, values);
+        if (result.rowCount === 0) {
+            console.log(`No se encontró el proveedor con id: ${idProveedor}`);
+            return null;
+        } else {
+            console.log(`Proveedor con id: ${idProveedor} eliminado.`);
+            return { rowCount: result.rowCount };
+        }
+    } catch (error) {
+        console.error('Error al eliminar proveedores:', error);
+        throw error;
+    }
+}
+
 async function insertProveedor(proveedorDTO) {
     try {
         const query = `
@@ -38,5 +56,6 @@ async function insertProveedor(proveedorDTO) {
 
 export {
     selectProveedores,
-    insertProveedor
+    insertProveedor,
+    deleteProveedor
 };

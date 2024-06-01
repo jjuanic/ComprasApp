@@ -12,6 +12,30 @@ async function insertRubroProveedor(idRubro, idProveedor) {
     }
 }
 
+async function deleteRubroProveedor(idRubro, idProveedor) {
+    try {
+        const query = 'DELETE FROM RubroProveedor where idRubro = $1 and idProveedor = $2';
+        const values = [idRubro, idProveedor];
+        const result = await client.query(query, values);
+        return result.rows[0];
+    } catch (error) {
+        console.error('Error al eliminar el rubroProveedor:', error);
+        throw error;
+    }
+}
+
+async function deleteAllRubroProveedor(idProveedor) {
+    try {
+        const query = 'DELETE FROM RubroProveedor where idProveedor = $1';
+        const values = [idProveedor];
+        const result = await client.query(query, values);
+        return result.rows[0];
+    } catch (error) {
+        console.error('Error al eliminar los rubros del proveedor:', error);
+        throw error;
+    }
+}
+
 async function selectRubroProveedor() {
     try {
         const query = 'SELECT * FROM RubroProveedor';
@@ -80,5 +104,7 @@ const selectProveedoresYRubros = async () => {
 export {
     insertRubroProveedor,
     selectRubroProveedor,
-    selectProveedoresYRubros
+    selectProveedoresYRubros,
+    deleteRubroProveedor,
+    deleteAllRubroProveedor
 };
