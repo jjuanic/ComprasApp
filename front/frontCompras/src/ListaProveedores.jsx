@@ -32,7 +32,7 @@ export function ListaProveedores() {
   }, []);
 
   const filteredProveedores = proveedores.filter(proveedor =>
-    proveedor.nombreProveedor && proveedor.nombreProveedor.toLowerCase().includes(searchTerm.toLowerCase())
+    proveedor.nombre && proveedor.nombre.toLowerCase().includes(searchTerm.toLowerCase())
   );
   
 
