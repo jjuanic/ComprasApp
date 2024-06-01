@@ -36,7 +36,6 @@ const selectProveedoresYRubros = async () => {
         // Estructuro los resultados para json
         const proveedoresConRubros = {};
         result.rows.forEach(row => {
-            console.log(row.nombre);
             const { idproveedor, nombre, numerotelefono, codpostal, descripcion, email, cuit, sitioweb, idrubro, nombrerubro: nombreRubro } = row;
             if (!proveedoresConRubros[idproveedor]) {
                 proveedoresConRubros[idproveedor] = {

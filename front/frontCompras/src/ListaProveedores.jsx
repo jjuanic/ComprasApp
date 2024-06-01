@@ -18,7 +18,6 @@ export function ListaProveedores() {
           },
         });
         const data = await response.json();
-        console.log(data);
         if (response.ok) {
           setProveedores(data);
         } else {
@@ -32,9 +31,9 @@ export function ListaProveedores() {
     fetchProveedores();
   }, []);
 
-  // const filteredProveedores = proveedores.filter(proveedor =>
-  //   proveedor.nombreProveedor && proveedor.nombreProveedor.toLowerCase().includes(searchTerm.toLowerCase())
-  // );
+  const filteredProveedores = proveedores.filter(proveedor =>
+    proveedor.nombreProveedor && proveedor.nombreProveedor.toLowerCase().includes(searchTerm.toLowerCase())
+  );
   
 
   return (
@@ -63,7 +62,7 @@ export function ListaProveedores() {
               </Tr>
             </Thead>
             <Tbody>
-              {proveedores.map(proveedor => (
+              {filteredProveedores.map(proveedor => (
                 <Tr key={proveedor.idProveedor}>
                   <Td>{proveedor.nombre}</Td>
                   <Td>
