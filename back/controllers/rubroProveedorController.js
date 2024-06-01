@@ -49,7 +49,7 @@ const postRubroProveedor = async (req, res) => {
       const idProveedor = await insertProveedor(proveedorDTO);
       console.log('Id del Proveedor: ', idProveedor);
       await Promise.all(idRubros.map(id => insertRubroProveedor(id, idProveedor)));
-      res.status(201).json({ message: "Proveedor con rubros insertados correctamente" });
+      res.status(201).json({ message: "Proveedor con rubros insertados correctamente", idProveedor: idProveedor });
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: "Error al insertar el rubro" });
