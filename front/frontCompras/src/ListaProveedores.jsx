@@ -18,6 +18,7 @@ export function ListaProveedores() {
           },
         });
         const data = await response.json();
+        console.log(data);
         if (response.ok) {
           setProveedores(data);
         } else {
@@ -31,9 +32,9 @@ export function ListaProveedores() {
     fetchProveedores();
   }, []);
 
-  const filteredProveedores = proveedores.filter(proveedor =>
-    proveedor.nombreProveedor && proveedor.nombreProveedor.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // const filteredProveedores = proveedores.filter(proveedor =>
+  //   proveedor.nombreProveedor && proveedor.nombreProveedor.toLowerCase().includes(searchTerm.toLowerCase())
+  // );
   
 
   return (
@@ -54,7 +55,7 @@ export function ListaProveedores() {
             <Thead>
               <Tr>
                 <Th>Nombre</Th>
-                <Th>Rubro</Th>
+                <Th>Rubros</Th>
                 <Th>Teléfono</Th>
                 <Th>Email</Th>
                 <Th>Dirección</Th>
@@ -62,9 +63,9 @@ export function ListaProveedores() {
               </Tr>
             </Thead>
             <Tbody>
-              {filteredProveedores.map(proveedor => (
+              {proveedores.map(proveedor => (
                 <Tr key={proveedor.idProveedor}>
-                  <Td>{proveedor.nombreProveedor}</Td>
+                  <Td>{proveedor.nombre}</Td>
                   <Td>
                     {proveedor.rubros.map((rubro, index) => (
                       <span key={rubro.idRubro}>
