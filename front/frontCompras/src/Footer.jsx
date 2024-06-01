@@ -14,7 +14,7 @@ export function Footer() {
                     px={4}
                 >
                     <Text fontSize="lg" mb={{ base: 4, md: 0 }}>
-                        &copy; {new Date().getFullYear()} Tu Empresa. Todos los derechos reservados.
+                        &copy; {new Date().getFullYear()} CygnusIT. Todos los derechos reservados.
                     </Text>
                     <Flex>
                         <Link href="https://facebook.com" isExternal mx={2} aria-label="Facebook">

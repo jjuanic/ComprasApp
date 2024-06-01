@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Header } from './Header';
 import { useNavigate } from 'react-router-dom';
 import { Center, Box, Heading, FormControl, FormLabel, Input, Button, Select } from '@chakra-ui/react';
@@ -29,10 +29,8 @@ export function RegistroProveedor() {
                     },
                 });
                 const data = await response.json();
-                console.log('Respuesta de la API:', data); // Añadir este log
                 if (response.ok) {
                     setRubros(data);
-                    console.log('Rubros establecidos:', data); // Añadir este log
                 } else {
                     setError('Error al cargar los rubros');
                 }
@@ -45,30 +43,39 @@ export function RegistroProveedor() {
     }, []);
 
     const handleSelectRubro = (event) => {
-        const selectedRubroId = parseInt(event.target.value);
-        const selectedRubro = rubros.find(rubro => rubro.idRubro === selectedRubroId);
+        const selectedRubro = JSON.parse(event.target.value);
+        console.log(selectedRubro.nombre); 
+        console.log(selectedRubro.idrubro);
         if (selectedRubro) {
-            setProveedor({ ...proveedor, rubrosSeleccionados: [...proveedor.rubrosSeleccionados, selectedRubro] });
-            setRubros(rubros.filter(rubro => rubro.idRubro !== selectedRubroId));
+            setRubrosSeleccionados([...rubrosSeleccionados, selectedRubro]);
+            setRubros(rubros.filter(rubro => rubro.idRubro !== selectedRubro.idrubro));
+        }
+        
+        
+    };
+    
+    
+    
+    const handleRemoveRubro = (rubroId) => {
+        const updatedRubrosSeleccionados = rubrosSeleccionados.filter(rubro => rubro.idFubro !== rubroId);
+        const removedRubro = rubrosSeleccionados.find(rubro => rubro.idRubro === rubroId);
+        setRubrosSeleccionados(updatedRubrosSeleccionados);
+        if (removedRubro) {
+            setRubros([...rubros, removedRubro]);
         }
     };
     
-    const handleRemoveRubro = (rubroId) => {
-        const removedRubro = proveedor.rubrosSeleccionados.find(rubro => rubro.idRubro === rubroId);
-        setProveedor({ ...proveedor, rubrosSeleccionados: proveedor.rubrosSeleccionados.filter(rubro => rubro.idRubro !== rubroId) });
-        setRubros([...rubros, removedRubro]);
-    };
     
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const { nombre, numeroTelefono, codPostal, descripcion, email, CUIT, sitioWeb, rubrosSeleccionados } = proveedor;
+        const { nombre, numeroTelefono, codPostal, descripcion, email, CUIT, sitioWeb } = proveedor;
 
         if (
             nombre === '' ||
             numeroTelefono === '' ||
             codPostal === '' ||
-            descripcion === '' ||
             email === '' ||
             CUIT === ''
         ) {
@@ -76,14 +83,29 @@ export function RegistroProveedor() {
             return;
         }
 
+        const rubrosIds = rubrosSeleccionados.map(rubro => rubro.idrubro);
+
+
+        const requestData = {
+            proveedor: {
+                nombre,
+                numeroTelefono,
+                codPostal,
+                descripcion,
+                email,
+                CUIT,
+                sitioWeb
+            },
+            rubros: rubrosIds
+        };
+        console.log(requestData)
         try {
-            console.log(proveedor); // Verifica si el proveedor se pasa correctamente
-            const response = await fetch('http://localhost:8080/proveedor/rubro', {
+            const response = await fetch('http://localhost:8080/proveedor/rubros', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(proveedor),
+                body: JSON.stringify(requestData),
             });
 
             const data = await response.json();
@@ -91,7 +113,7 @@ export function RegistroProveedor() {
             if (response.ok) {
                 setSuccess('Proveedor creado con éxito');
                 setError('');
-                navigate('/Principal');
+                navigate('/');
             } else {
                 setError(data.errores || 'Error al crear el proveedor');
             }
@@ -100,7 +122,6 @@ export function RegistroProveedor() {
             setError('Error de conexión');
         }
     };
-
     return (
         <>
             <Header />
@@ -119,7 +140,7 @@ export function RegistroProveedor() {
                             </FormControl>
                             <FormControl mt='3px'>
                                 <FormLabel>Télefono</FormLabel>                                      
-                                <Input id='telefono' type='text' required onChange={(event) => setProveedor({...proveedor, numeroTelefono: event.target.value})} />
+                                <Input id='numeroTelefono' type='text' required onChange={(event) => setProveedor({...proveedor, numeroTelefono: event.target.value})} />
                             </FormControl>
                             <FormControl mt='3px'>
                                 <FormLabel>Código Postal</FormLabel>                                      
@@ -135,24 +156,28 @@ export function RegistroProveedor() {
                             </FormControl>
                             <FormControl mt='3px'>
                                 <FormLabel>Sitio Web</FormLabel>                                      
-                                <Input id='cuit' type='text' placeholder='URL' required onChange={(event) => setProveedor({...proveedor, sitioWeb: event.target.value})} />
+                                <Input id='sitioWeb' type='text' placeholder='URL' required onChange={(event) => setProveedor({...proveedor, sitioWeb: event.target.value})} />
                             </FormControl>
-                            <FormControl mt='10px'> 
-                                <Select name="rubros" placeholder="Rubros" onChange={handleSelectRubro}>
-                                    {rubros.map(rubro => (
-                                        <option key={rubro.idRubro} value={rubro.idRubro}>{rubro.nombre}</option>
-                                    ))}
-                                </Select>
+                            <FormControl mt='10px'>
+                            <Select name="rubros" placeholder="Rubros" onChange={handleSelectRubro}>
+                                {rubros.map((rubro, index) => ( 
+                                    <option key={index} value={JSON.stringify(rubro)}>{rubro.nombre}</option>
+                                ))}
+                            </Select>
+
                             </FormControl>
 
                             <Box mt='10px'>
                                 <FormLabel>Rubros Seleccionados</FormLabel>
+                                {console.log(rubrosSeleccionados)}
                                 {rubrosSeleccionados.map((rubro) => (
-                                    <Box key={rubro.idRubro} mt='3px' display="flex" justifyContent="space-between" alignItems="center">
-                                        {rubro.nombre}
-                                        <Button ml='10px' onClick={() => handleRemoveRubro(rubro.idRubro)}>Eliminar</Button>
-                                    </Box>
-                                ))}
+                                <Box key={rubro.idRubro} mt='3px' display="flex" justifyContent="space-between" alignItems="center">
+                                    {rubro.nombre}
+                                    <Button ml='10px' onClick={() => handleRemoveRubro(rubro.idRubro)}>Eliminar</Button>
+                                </Box>
+                            ))}
+
+
                             </Box>
 
                             <FormControl mt='10px'>

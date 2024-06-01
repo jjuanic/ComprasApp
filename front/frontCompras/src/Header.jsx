@@ -20,12 +20,16 @@ export function Header() {
                                 Nuevo Rubro
                             </MenuItem>
                             <MenuItem as={Link} to="/eliminarProveedor">
-                                Eliminar Proveedor
+                                Por si acaso
                             </MenuItem>
                         </MenuList>
                     </Menu>
-
+                    <Box cursor='pointer' color='white' _hover={{ color: 'gray.300' }}>
+                            <Link to="/">Home</Link>
+                    </Box>
                 </HStack>
+
+
 
                 <HStack as='nav' spacing='10px'>
                     <Box mr='20px' cursor='pointer' color ='white' _hover={{ color: 'gray.300' }} onClick={() => cerrarSesion()}>Cerrar sesión</Box>
