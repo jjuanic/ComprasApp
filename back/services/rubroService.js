@@ -34,10 +34,10 @@ async function deleteRubroDB(idRubro) {
         const query = 'DELETE FROM Rubro where idRubro = $1';
         const values = [idRubro];
         const result = await client.query(query, values);
-        return result.rows[0];
+        return result.rowCount
     } catch (error) {
-        console.error('Error al eliminar el rubr:', error);
-        throw error;
+        console.error('Error al eliminar el rubro:', error);
+        return error
     }
 }
 

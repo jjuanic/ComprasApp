@@ -23,8 +23,17 @@ const postRubro = async (req, res) => {
 };
 
 const deleteRubro = async (req,res) => {
-  await deleteRubroDB(req.idrubro)
-  res.status(201).json({ message: "Rubro correspondiente eliminado" });
+  try {
+    const response = await deleteRubroDB(req.body.idRubro);
+    console.log(response);
+    if (response === 0) {
+        return res.status(400).json({ message: 'No se eliminó ningún rubro' });
+    }
+    return res.status(200).json({ message: 'Rubro eliminado correctamente' });
+} catch (error) {
+    console.error('Error en el controlador al eliminar el rubro:', error.message);
+    return res.status(500).json({ message: 'Error interno del servidor' });
+}
 }
 
 export {
