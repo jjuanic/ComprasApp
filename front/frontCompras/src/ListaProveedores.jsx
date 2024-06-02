@@ -86,10 +86,15 @@ export function ListaProveedores() {
     }
   };
 
-  const filteredProveedores = proveedores.filter(proveedor =>
-    proveedor.nombre && proveedor.nombre.toLowerCase().includes(searchTerm.toLowerCase()) &&
-    (!selectedRubro || proveedor.rubros.some(rubro => rubro && rubro.nombre.toLowerCase() === selectedRubro.toLowerCase()))
-  );
+  const filteredProveedores = proveedores.filter(proveedor => {
+    const matchesSearchTerm = proveedor.nombre && proveedor.nombre.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSelectedRubro = selectedRubro === '' || proveedor.rubros.some(rubro => {
+      console.log('Rubro:', rubro); // Ver los datos de rubro
+      console.log("selectedRubro:", selectedRubro);
+      return rubro.nombreRubro === selectedRubro; // Asegurarse de comparar con la propiedad correcta
+    });
+    return matchesSearchTerm && matchesSelectedRubro;
+  });
 
   return (
     <>
@@ -110,10 +115,10 @@ export function ListaProveedores() {
             borderRadius="20px"
             placeholder="Todos los Rubros"
             onChange={e => setSelectedRubro(e.target.value)}
-            width="200px" // Adjust the width according to your preference
+            width="200px"
           >
             {rubros.map((rubro, index) => (
-              <option key={index} value={rubro.id}>{rubro.nombre}</option>
+              <option key={index} value={rubro.idRubro}>{rubro.nombre}</option>
             ))}
           </Select>
         </div>
@@ -162,5 +167,4 @@ export function ListaProveedores() {
       <ProveedorModal isOpen={isOpen} onClose={onClose} provider={selectedProvider} />
     </>
   );
-  
 }
