@@ -7,9 +7,8 @@ import { RegistroProveedor } from "./RegistroProveedor";
 export function Principal(){
     return(
         <>
-            <Header />
             <ListaProveedores />
-            <Footer />
+
            
         </>
     )

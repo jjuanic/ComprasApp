@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Table, TableContainer, Thead, Tr, Th, Tbody, Td, useDisclosure, Select } from '@chakra-ui/react';
+import { Box, Table, TableContainer, Thead, Tr, Th, Tbody, Td, useDisclosure, Select, Heading } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import { FaEdit, FaRegStickyNote, FaTrashAlt, FaGlobeAmericas, FaSearch } from 'react-icons/fa';
 import ProveedorModal from './ProveedorModal'; // Importar el componente del modal correctamente
@@ -89,7 +89,7 @@ export function ListaProveedores() {
   const filteredProveedores = proveedores.filter(proveedor => {
     const matchesSearchTerm = proveedor.nombre && proveedor.nombre.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesSelectedRubro = selectedRubro === '' || proveedor.rubros.some(rubro => {
-      console.log('Rubro:', rubro); // Ver los datos de rubro
+      console.log('Rubro:', rubro.nombreRubro); // Ver los datos de rubro
       console.log("selectedRubro:", selectedRubro);
       return rubro.nombreRubro === selectedRubro; // Asegurarse de comparar con la propiedad correcta
     });
@@ -98,6 +98,9 @@ export function ListaProveedores() {
 
   return (
     <>
+      <center>
+      <Heading>Lista Proveedores</Heading>
+      </center>
       <Box m='50px'>
         <div style={{ marginBottom: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -131,7 +134,7 @@ export function ListaProveedores() {
                 <Th>Rubros</Th>
                 <Th>Teléfono</Th>
                 <Th>Email</Th>
-                <Th>Dirección</Th>
+                <Th>Código Postal</Th>
                 <Th>Acciones</Th>
               </Tr>
             </Thead>

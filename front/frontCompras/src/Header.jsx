@@ -13,26 +13,21 @@ export function Header() {
                     <Menu>  
                         <MenuButton as={IconButton} aria-label="Opciones" icon={<AiOutlineMenu />} variant="outline" bg='#ffffff '></MenuButton>
                         <MenuList>
+                            <MenuItem as={Link} to="/listaRubros">
+                                Lista Rubros
+                            </MenuItem>
+
                             <MenuItem as={Link} to="/registroProveedor">
                                 Nuevo Proveedor
                             </MenuItem>
                             <MenuItem as={Link} to="/registroRubro">
                                 Nuevo Rubro
-                            </MenuItem>
-                            <MenuItem as={Link} to="/eliminarProveedor">
-                                Por si acaso
-                            </MenuItem>
+                            </MenuItem>                            
                         </MenuList>
                     </Menu>
                     <Box cursor='pointer' color='white' _hover={{ color: 'gray.300' }}>
                             <Link to="/">Home</Link>
                     </Box>
-                </HStack>
-
-
-
-                <HStack as='nav' spacing='10px'>
-                    <Box mr='20px' cursor='pointer' color ='white' _hover={{ color: 'gray.300' }} onClick={() => cerrarSesion()}>Cerrar sesión</Box>
                 </HStack>
             </Flex>
         </>

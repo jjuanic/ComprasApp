@@ -124,7 +124,6 @@ export function RegistroProveedor() {
     };
     return (
         <>
-            <Header />
             <Center>
                 <Box m='40px' boxShadow='xl' borderRadius='md' width='40%' id='caja'>
                     <Box textAlign='center'>
