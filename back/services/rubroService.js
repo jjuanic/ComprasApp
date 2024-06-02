@@ -28,7 +28,23 @@ async function selectRubro() {
     }
 }
 
+
+async function deleteRubroDB(idRubro) {
+    try {
+        const query = 'DELETE FROM Rubro where idRubro = $1';
+        const values = [idRubro];
+        const result = await client.query(query, values);
+        return result.rows[0];
+    } catch (error) {
+        console.error('Error al eliminar el rubr:', error);
+        throw error;
+    }
+}
+
+
+
 export {
     insertRubro,
-    selectRubro
+    selectRubro,
+    deleteRubroDB
 };

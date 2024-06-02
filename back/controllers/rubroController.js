@@ -1,5 +1,5 @@
 import RubroDTO from "../models/RubroDTO.js";
-import { insertRubro, selectRubro } from "../services/rubroService.js";
+import { insertRubro, selectRubro, deleteRubroDB } from "../services/rubroService.js";
 
 const getRubros = async (req, res) => {
     const rubros = await selectRubro()
@@ -20,9 +20,15 @@ const postRubro = async (req, res) => {
       console.error(error);
       res.status(500).json({ error: "Error al insertar el rubro" });
     }
-  };
-  
+};
+
+const deleteRubro = async (req,res) => {
+  await deleteRubroDB(req.idrubro)
+  res.status(201).json({ message: "Rubro correspondiente eliminado" });
+}
+
 export {
     getRubros,
-    postRubro
+    postRubro,
+    deleteRubro
 };
