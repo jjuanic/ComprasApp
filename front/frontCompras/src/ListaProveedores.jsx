@@ -65,7 +65,7 @@ export function ListaProveedores() {
     try {
       console.log(idProveedor);
       const response = await fetch('http://localhost:8080/proveedor/rubros/eliminar', {
-        method: 'DELETE',
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -89,8 +89,6 @@ export function ListaProveedores() {
   const filteredProveedores = proveedores.filter(proveedor => {
     const matchesSearchTerm = proveedor.nombre && proveedor.nombre.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesSelectedRubro = selectedRubro === '' || proveedor.rubros.some(rubro => {
-      console.log('Rubro:', rubro.nombreRubro); // Ver los datos de rubro
-      console.log("selectedRubro:", selectedRubro);
       return rubro.nombreRubro === selectedRubro; // Asegurarse de comparar con la propiedad correcta
     });
     return matchesSearchTerm && matchesSelectedRubro;

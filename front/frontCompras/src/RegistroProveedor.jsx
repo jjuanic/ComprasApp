@@ -44,8 +44,6 @@ export function RegistroProveedor() {
 
     const handleSelectRubro = (event) => {
         const selectedRubro = JSON.parse(event.target.value);
-        console.log(selectedRubro.nombre); 
-        console.log(selectedRubro.idrubro);
         if (selectedRubro) {
             setRubrosSeleccionados([...rubrosSeleccionados, selectedRubro]);
             setRubros(rubros.filter(rubro => rubro.idRubro !== selectedRubro.idrubro));
@@ -58,7 +56,8 @@ export function RegistroProveedor() {
     
     const handleRemoveRubro = (rubroId) => {
         // Filtrar los rubros seleccionados para excluir el rubro con el ID igual a rubroId
-        const updatedRubrosSeleccionados = rubrosSeleccionados.filter(rubro => rubro.idRubro !== rubroId);
+        console.log(rubroId);
+        const updatedRubrosSeleccionados = rubrosSeleccionados.filter(rubro => rubro.idrubro !== rubroId);
         
         // Actualizar la lista de rubros seleccionados con los rubros filtrados
         setRubrosSeleccionados(updatedRubrosSeleccionados);
@@ -98,7 +97,6 @@ export function RegistroProveedor() {
             },
             rubros: rubrosIds
         };
-        console.log(requestData)
         try {
             const response = await fetch('http://localhost:8080/proveedor/rubros', {
                 method: 'POST',
@@ -168,11 +166,11 @@ export function RegistroProveedor() {
 
                             <Box mt='10px'>
                                 <FormLabel>Rubros Seleccionados</FormLabel>
-                                {console.log(rubrosSeleccionados)}
-                                {rubrosSeleccionados.map((rubro) => (
-                                <Box key={rubro.idRubro} mt='3px' display="flex" justifyContent="space-between" alignItems="center">
+                                {rubrosSeleccionados.map((rubro, index) => (
+                                <Box key={index} mt='3px' display="flex" justifyContent="space-between" alignItems="center">
                                     {rubro.nombre}
-                                    <Button ml='10px' onClick={() => handleRemoveRubro(rubro.idRubro)}>Eliminar</Button>
+                                    <Button ml='10px' onClick={() => handleRemoveRubro(rubro.idrubro)}>Eliminar</Button>
+                                    
                                 </Box>
                             ))}
 
