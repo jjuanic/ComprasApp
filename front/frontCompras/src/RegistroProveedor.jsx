@@ -45,8 +45,12 @@ export function RegistroProveedor() {
     const handleSelectRubro = (event) => {
         const selectedRubro = JSON.parse(event.target.value);
         if (selectedRubro) {
+            const seleccionado = rubrosSeleccionados.some(rubro => rubro.idrubro === selectedRubro.idrubro);
+            if (!seleccionado) {
             setRubrosSeleccionados([...rubrosSeleccionados, selectedRubro]);
             setRubros(rubros.filter(rubro => rubro.idRubro !== selectedRubro.idrubro));
+            }
+
         }
         
         
@@ -55,11 +59,7 @@ export function RegistroProveedor() {
     
     
     const handleRemoveRubro = (rubroId) => {
-        // Filtrar los rubros seleccionados para excluir el rubro con el ID igual a rubroId
-        console.log(rubroId);
         const updatedRubrosSeleccionados = rubrosSeleccionados.filter(rubro => rubro.idrubro !== rubroId);
-        
-        // Actualizar la lista de rubros seleccionados con los rubros filtrados
         setRubrosSeleccionados(updatedRubrosSeleccionados);
     };
     
@@ -83,8 +83,6 @@ export function RegistroProveedor() {
         }
 
         const rubrosIds = rubrosSeleccionados.map(rubro => rubro.idrubro);
-
-
         const requestData = {
             proveedor: {
                 nombre,
@@ -165,16 +163,14 @@ export function RegistroProveedor() {
                             </FormControl>
 
                             <Box mt='10px'>
-                                <FormLabel>Rubros Seleccionados</FormLabel>
-                                {rubrosSeleccionados.map((rubro, index) => (
-                                <Box key={index} mt='3px' display="flex" justifyContent="space-between" alignItems="center">
-                                    {rubro.nombre}
-                                    <Button ml='10px' onClick={() => handleRemoveRubro(rubro.idrubro)}>Eliminar</Button>
-                                    
-                                </Box>
-                            ))}
-
-
+                                    <FormLabel>Rubros Seleccionados</FormLabel>
+                                    {rubrosSeleccionados.map((rubro, index) => (
+                                    <Box key={index} mt='3px' display="flex" justifyContent="space-between" alignItems="center">
+                                        {rubro.nombre}
+                                        <Button ml='10px' onClick={() => handleRemoveRubro(rubro.idrubro)}>Eliminar</Button>
+                                        
+                                    </Box>
+                                ))}
                             </Box>
 
                             <FormControl mt='10px'>
